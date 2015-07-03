@@ -5,7 +5,7 @@
     <artifactId>javascript-console-repo</artifactId>
     <name>JavaScript Console - Repository</name>
     <description>Alfresco Share-Extras JavaScript Console - Repository Module</description>
-    <packaging>amp</packaging>
+    <packaging>jar</packaging>
 	
  	<parent>
         <groupId>org.sharextras</groupId>
@@ -78,6 +78,7 @@
         </dependencies>
     </dependencyManagement>
 
+    
     <!-- Following dependencies are needed for compiling Java code in src/main/java; <scope>provided</scope> is inherited for each of the following;
         for more info, please refer to alfresco-platform-distribution POM -->
     <dependencies>
@@ -87,6 +88,19 @@
         </dependency>
     </dependencies>
 
+	<build>
+          <resources>
+	    <resource>
+	      <filtering>${app.filtering.enabled}</filtering>
+	      <directory>src/main/resources</directory>
+	    </resource>
+	    <resource>
+	      <!--targetPath>${app.amp.output.folder}</targetPath>
+		  <filtering>${app.filtering.enabled}</filtering-->
+	      <directory>src/main/amp/config</directory>
+	    </resource>
+	  </resources>   
+	</build>
 
     <profiles>
 		

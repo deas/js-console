@@ -5,7 +5,7 @@
     <artifactId>javascript-console-share</artifactId>
     <name>JavaScript Console - Share</name>
     <description>Alfresco Share-Extras JavaScript Console - Share Module</description>
-    <packaging>amp</packaging>
+    <packaging>jar</packaging>
 
      <parent>
         <groupId>org.sharextras</groupId>
@@ -100,7 +100,23 @@
 
 
 	<build>
-		<plugins>
+          <resources>
+	    <resource>
+	      <filtering>${app.filtering.enabled}</filtering>
+	      <directory>src/main/resources</directory>
+	    </resource>
+	    <resource>
+	      <!--targetPath>${app.amp.output.folder}</targetPath>
+		  <filtering>${app.filtering.enabled}</filtering-->
+	      <directory>src/main/amp/config</directory>
+	    </resource>
+	    <resource>
+	      <targetPath>META-INF</targetPath>
+		  <!--filtering>${app.filtering.enabled}</filtering-->
+	      <directory>src/main/amp/web</directory>
+	    </resource>
+	  </resources>   
+	  <plugins>
 
 <!-- Compress JavaScript files and store as *-min.js -->
             
