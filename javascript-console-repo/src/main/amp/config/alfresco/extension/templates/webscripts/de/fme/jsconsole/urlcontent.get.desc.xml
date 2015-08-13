@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>fme JSConsole Get Script Content from URL</shortname>
+  <url>/de/fme/jsconsole/urlcontent</url>
+  <authentication>admin</authentication>
+  <!--format default="json">extension</format-->
+</webscript>

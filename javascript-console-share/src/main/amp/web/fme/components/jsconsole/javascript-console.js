@@ -1981,18 +1981,23 @@ if (typeof String.prototype.startsWith != 'function') {
                       self.widgets.codeMirrorTemplate.setValue("");
                   },
                   scope: this
-          }
+              },
+              cntAddr = p_aArgs[1].value;
 
-          var nodeRef = p_aArgs[1].value;
-
-          if (nodeRef == "NEW") {
+          if (cntAddr == "NEW") {
               self.loadDemoScript.call(self);
           }
           else {
-              var url = Alfresco.constants.PROXY_URI + "api/node/content/" + nodeRef.replace("://","/");
-              YAHOO.util.Connect.asyncRequest('GET', url, callback);
-              var url = Alfresco.constants.PROXY_URI + "api/node/content;jsc:freemarkerScript/" + nodeRef.replace("://","/");
-              YAHOO.util.Connect.asyncRequest('GET', url, callbackFreemarker);
+              if (cntAddr.indexOf("://") > -1) {
+                  var url = Alfresco.constants.PROXY_URI + "api/node/content/" + cntAddr.replace("://","/");
+                  YAHOO.util.Connect.asyncRequest('GET', url, callback);
+                  url = Alfresco.constants.PROXY_URI + "api/node/content;jsc:freemarkerScript/" + cntAddr.replace("://","/");
+                  YAHOO.util.Connect.asyncRequest('GET', url, callbackFreemarker);
+              } else {
+                  var url = Alfresco.constants.PROXY_URI + "de/fme/jsconsole/urlcontent?url=" + cntAddr;
+                  YAHOO.util.Connect.asyncRequest('GET', url, callback);
+                  self.widgets.codeMirrorTemplate.setValue = "";
+              }
           }
        },
 
