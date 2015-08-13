@@ -228,11 +228,13 @@ if (typeof String.prototype.startsWith != 'function') {
                    container: this.id + "-documentation"
              });
 
+             var menu = this.widgets.docsMenuButton.getMenu();
+             menu.cfg.setProperty("zindex", 3);
 
-             this.widgets.docsMenuButton.getMenu().setItemGroupTitle("Javascript", 0);
-             this.widgets.docsMenuButton.getMenu().setItemGroupTitle("Freemarker", 1);
-             this.widgets.docsMenuButton.getMenu().setItemGroupTitle("Lucene", 2);
-             this.widgets.docsMenuButton.getMenu().setItemGroupTitle("Webscripts", 3);
+             menu.setItemGroupTitle("Javascript", 0);
+             menu.setItemGroupTitle("Freemarker", 1);
+             menu.setItemGroupTitle("Lucene", 2);
+             menu.setItemGroupTitle("Webscripts", 3);
           }
       },
 
@@ -257,7 +259,9 @@ if (typeof String.prototype.startsWith != 'function') {
                   menu: saveMenuItems,
                   container: this.id + "-scriptsave"
               });
-              this.widgets.saveMenuButton.getMenu().subscribe("click", this.onSaveScriptClick, this);
+              var menu = this.widgets.saveMenuButton.getMenu();
+              menu.cfg.setProperty("zindex", 3);
+              menu.subscribe("click", this.onSaveScriptClick, this);
           }
 
 
@@ -285,7 +289,9 @@ if (typeof String.prototype.startsWith != 'function') {
                   container: this.id + "-scriptload"
             });
 
-            this.widgets.loadMenuButton.getMenu().subscribe("click", this.onLoadScriptClick, this);
+              var menu = this.widgets.loadMenuButton.getMenu();
+              menu.cfg.setProperty("zindex", 3);
+              menu.subscribe("click", this.onLoadScriptClick, this);
           }
       },
 
@@ -330,8 +336,9 @@ if (typeof String.prototype.startsWith != 'function') {
 
                     }
                 }
-
-                this.widgets.themeMenuButton.getMenu().subscribe("click", this.onThemeSelection, this);
+               var menu = this.widgets.themeMenuButton.getMenu();
+               menu.cfg.setProperty("zindex", 3);
+               menu.subscribe("click", this.onThemeSelection, this);
             }
       },
 
