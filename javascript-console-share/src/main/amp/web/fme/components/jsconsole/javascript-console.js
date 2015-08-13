@@ -1965,18 +1965,20 @@ if (typeof String.prototype.startsWith != 'function') {
                   self.widgets.codeMirrorScript.setValue(o.responseText);
               },
               failure: function(o) {
-                  text: self.msg("error.script.load", filename)
+                  Alfresco.util.PopupManager.displayMessage(
+                      {
+                          text: self.msg("error.script.load", o.status + ":" + o.statusText)
+                      });
               },
               scope: this
-          }
-
-          var callbackFreemarker = {
+          },
+              callbackFreemarker = {
                   success : function(o) {
                       // set the new editor content
                       self.widgets.codeMirrorTemplate.setValue(o.responseText);
                   },
                   failure: function(o) {
-                      text: self.msg("error.script.load", filename)
+                      self.widgets.codeMirrorTemplate.setValue("");
                   },
                   scope: this
           }
