@@ -1,10 +1,6 @@
 var prepareOutput = function prepareOutput(folder) {
-    var scriptlist = [];
-
-    var children = folder.children;
-    children.sort(function (a, b) {
-        return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
-    });
+    var scriptlist = [],
+        children = folder.children;
 
     for (c in children) {
         var node = children[c];
@@ -40,7 +36,7 @@ var buildResNode = function buildResNode(s, node) {
 
 };
 
-function createResEntry(n, s) {
+var createResEntry = function createResEntry(n, s) {
     var ent = {text: n};
     if (typeof s === "string") {
         ent.value = s;
@@ -92,6 +88,7 @@ var findAvailableScripts = function findAvailableScripts() {
     }
 
     scripts = scripts.concat(addResourceScripts());
+    scripts.sort(function(a,b) { return a.text.localeCompare(b.text); });
 
     model.scripts = jsonUtils.toJSONString(scripts);
 }
