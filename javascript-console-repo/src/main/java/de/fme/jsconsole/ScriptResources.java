@@ -15,19 +15,22 @@ import java.util.List;
 
 public class ScriptResources extends BaseProcessorExtension implements ApplicationContextAware {
     private ApplicationContext applicationContext;
-    private List<String> scanPattern;
+    private String[] scanPattern;
 
-    public void setScanPattern(List<String> scanPattern) {
+    public void setScanPattern(String[] scanPattern) {
         this.scanPattern = scanPattern;
     }
 
     public String[] getScriptResources() {
+        return getScriptResources(this.scanPattern);
+    }
+
+    public String[] getScriptResources(String[] patterns) {
         List<String> resNames = new ArrayList<String>();
         ClassPathStoreResourceResolver cpsResolver = new ClassPathStoreResourceResolver(getApplicationContext());
         try {
-            if (this.scanPattern != null) {
-                changed:
-                for (String pat : scanPattern) {
+            if (patterns != null) {
+                for (String pat : patterns) {
                     Resource[] resources = cpsResolver.getResources(pat);
                     for (Resource res : resources) {
                         resNames.add(res.getURL().toString());
