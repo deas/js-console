@@ -166,11 +166,23 @@ if (typeof String.prototype.startsWith != 'function') {
             }
        },
 
-      createMenuButtons: function ACJC_createMenuButtons(listOfScripts) {
+      initTitle: function ACJC_listOfScripts(entry) {
+          if (entry.url) {
+              entry.text = '<span title="' + entry.value + '">' + entry.text + '</span>';
+              if (entry.submenu) {
+                  entry.submenu.itemdata.forEach(function(f) {
+                      this.initTitle(f);
+                  }.bind(this));
+              }
+          }
+      },
+
+      createMenuButtons: function ACJC_createMenuButtons(scripts) {
 
           this.createThemeMenu();
-          this.createScriptsLoadMenu(listOfScripts);
-          this.createScriptsSaveMenu(listOfScripts);
+          scripts.forEach(function(e) { this.initTitle.call(this, e); }.bind(this));
+          this.createScriptsLoadMenu(scripts);
+          this.createScriptsSaveMenu(scripts.filter(function(e) { return !e.url; }));
           this.createDocsMenu();
           this.createDumpDisplayMenu();
 

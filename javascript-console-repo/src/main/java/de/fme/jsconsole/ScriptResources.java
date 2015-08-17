@@ -11,21 +11,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ScriptResources extends BaseProcessorExtension implements ApplicationContextAware {
     private ApplicationContext applicationContext;
+    private String[] urlIncludes;
     private String[] scanPattern;
 
     public void setScanPattern(String[] scanPattern) {
         this.scanPattern = scanPattern;
     }
 
-    public String[] getScriptResources() {
-        return getScriptResources(this.scanPattern);
+    public void setUrlIncludes(String[] urlIncludes) {
+        this.urlIncludes = urlIncludes;
     }
 
-    public String[] getScriptResources(String[] patterns) {
+    public String[] getAllResources() {
+        List<String> allNames = new ArrayList<String>();
+        allNames.addAll(Arrays.asList(getResources(this.scanPattern)));
+        allNames.addAll(Arrays.asList(getUrlIncludes(this.urlIncludes)));
+        return allNames.toArray(new String[allNames.size()]);
+    }
+
+    public String[] getResources() {
+        return getResources(this.scanPattern);
+    }
+
+    public String[] getResources(String[] patterns) {
         List<String> resNames = new ArrayList<String>();
         ClassPathStoreResourceResolver cpsResolver = new ClassPathStoreResourceResolver(getApplicationContext());
         try {
@@ -49,6 +62,25 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
             java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
             return s.hasNext() ? s.next() : null;
         }
+    }
+
+    public String[] getUrlIncludes() {
+        return getUrlIncludes(this.urlIncludes);
+    }
+
+    public String[] getUrlIncludes(String[] includes) {
+        List<String> incNames = new ArrayList<String>();
+        if (includes != null) {
+            for (String url : includes) {
+                try {
+                    String[] urls = getResourceContent(url).split("\\r?\\n");
+                    incNames.addAll(Arrays.asList(urls));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return incNames.toArray(new String[incNames.size()]);
     }
 
     @Override
