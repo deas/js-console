@@ -39,15 +39,19 @@
 	</bean>
 
 
-	<!-- override me -->
+	<!-- override us -->
 	<util:list id="jsconsole.extension.scriptPattern">
 		<value>classpath*:/alfresco/module/**/*.js</value>
 		<!--value>file:/home/you/jsconsole/**/*.js</value-->
+	</util:list>
+	<util:list id="jsconsole.extension.urlPattern">
+		<!--value>http://localhost:8080/share/urlpattern.txt</value-->
 	</util:list>
 
 	<bean id="jsconsole.extension.scriptResources" parent="baseJavaScriptExtension" class="de.fme.jsconsole.ScriptResources">
 		<property name="extensionName" value="jsConsoleResources"/>
 		<property name="scanPattern" ref="jsconsole.extension.scriptPattern"/>
+		<property name="urlIncludes" ref="jsconsole.extension.urlPattern"/>
 	</bean>
 
 </beans>

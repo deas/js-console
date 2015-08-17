@@ -80,7 +80,7 @@ var trimPaths = function trimPaths(entry) {
 var addResourceScripts = function addResourceScripts() {
     var tree = {};
         scriptlist = [],
-        sRes = jsConsoleResources.getResources().map(function (s) {
+        sRes = jsConsoleResources.getAllResources().map(function (s) {
             var js = ''+s;// != new String(s) != s;
             // file:/opt/alfresco-5.0/tomcat/shared/classes/alfresco/extension/custom-web-context.xml
             // return {path: js.replace(/.*!|.*\/classes/, "").split("/"), url: js};

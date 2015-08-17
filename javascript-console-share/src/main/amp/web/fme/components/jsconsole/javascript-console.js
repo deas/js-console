@@ -168,7 +168,7 @@ if (typeof String.prototype.startsWith != 'function') {
 
       initTitle: function ACJC_listOfScripts(entry) {
           if (entry.url) {
-              entry.text = '<span title="' + entry.value + '">' + entry.text + '</span>';
+              entry.text = entry.value ? '<span title="' + entry.value + '">' + entry.text + '</span>' : entry.text;
               if (entry.submenu) {
                   entry.submenu.itemdata.forEach(function(f) {
                       this.initTitle(f);
@@ -1977,6 +1977,7 @@ if (typeof String.prototype.startsWith != 'function') {
          * @method onLoadScriptClick
          */
       onLoadScriptClick : function ACJC_onLoadScriptClick(p_sType, p_aArgs, self) {
+          p_aArgs[0].preventDefault();
 
           var callback = {
               success : function(o) {
@@ -2007,7 +2008,7 @@ if (typeof String.prototype.startsWith != 'function') {
               self.loadDemoScript.call(self);
           }
           else {
-              if (cntAddr.indexOf("://") > -1) {
+              if (cntAddr.indexOf("workspace://") > -1) {
                   var url = Alfresco.constants.PROXY_URI + "api/node/content/" + cntAddr.replace("://","/");
                   YAHOO.util.Connect.asyncRequest('GET', url, callback);
                   url = Alfresco.constants.PROXY_URI + "api/node/content;jsc:freemarkerScript/" + cntAddr.replace("://","/");
