@@ -241,7 +241,7 @@ if (typeof String.prototype.startsWith != 'function') {
              });
 
              var menu = this.widgets.docsMenuButton.getMenu();
-             menu.cfg.setProperty("zindex", 3);
+             menu.cfg.setProperty("zindex", 10);
 
              menu.setItemGroupTitle("Javascript", 0);
              menu.setItemGroupTitle("Freemarker", 1);
@@ -272,7 +272,7 @@ if (typeof String.prototype.startsWith != 'function') {
                   container: this.id + "-scriptsave"
               });
               var menu = this.widgets.saveMenuButton.getMenu();
-              menu.cfg.setProperty("zindex", 3);
+              menu.cfg.setProperty("zindex", 10);
               menu.subscribe("click", this.onSaveScriptClick, this);
           }
 
@@ -302,7 +302,7 @@ if (typeof String.prototype.startsWith != 'function') {
             });
 
               var menu = this.widgets.loadMenuButton.getMenu();
-              menu.cfg.setProperty("zindex", 3);
+              menu.cfg.setProperty("zindex", 10);
               menu.subscribe("click", this.onLoadScriptClick, this);
           }
       },
@@ -349,7 +349,7 @@ if (typeof String.prototype.startsWith != 'function') {
                     }
                 }
                var menu = this.widgets.themeMenuButton.getMenu();
-               menu.cfg.setProperty("zindex", 3);
+               menu.cfg.setProperty("zindex", 10);
                menu.subscribe("click", this.onThemeSelection, this);
             }
       },
