@@ -1,6 +1,8 @@
 package de.fme.jsconsole;
 
 import org.alfresco.repo.processor.BaseProcessorExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -15,9 +17,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ScriptResources extends BaseProcessorExtension implements ApplicationContextAware {
+    private static final Logger logger = LoggerFactory.getLogger(ScriptResources.class);
     private ApplicationContext applicationContext;
     private String[] urlIncludes;
     private String[] scanPattern;
+    private boolean ignoreIncludeEx;
+
+    public void setIgnoreIncludeEx(boolean ignoreIncludeEx) {
+        this.ignoreIncludeEx = ignoreIncludeEx;
+    }
 
     public void setScanPattern(String[] scanPattern) {
         this.scanPattern = scanPattern;
@@ -51,13 +59,13 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            new RuntimeException(e);
         }
         return resNames.toArray(new String[resNames.size()]);
 
     }
 
-    public String getResourceContent(String url) throws Exception {
+    public String getResourceContent(String url) throws IOException {
         try (InputStream is = new URL(url).openStream()) {
             java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
             return s.hasNext() ? s.next() : null;
@@ -75,8 +83,12 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
                 try {
                     String[] urls = getResourceContent(url).split("\\r?\\n");
                     incNames.addAll(Arrays.asList(urls));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    if (this.ignoreIncludeEx) {
+                        logger.warn("Error loading include from {} : {}", url, e.getMessage());
+                    } else {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
