@@ -8,13 +8,14 @@ var prepareOutput = function prepareOutput(folder) {
         if (node.isContainer) {
             scriptlist.push({
                 text: node.name,
+                canSave: true,
                 submenu: {
                     id: node.properties["sys:node-uuid"], itemdata: prepareOutput(node)
                 }
             });
         }
         else {
-            scriptlist.push({text: node.name, value: node.nodeRef});
+            scriptlist.push({text: node.name, value: node.nodeRef, canSave: true });
         }
     }
 
@@ -29,22 +30,25 @@ var buildResNode = function buildResNode(s, node) {
     } else {
         if (!node[e]) {
             node[e] = {};
+            node[e] = { entries: {}, canSave: s.canSave };
         }
-        buildResNode({path: s.path, url: s.url}, node[e]);
+        buildResNode({path: s.path, url: s.url, canSave: s.canSave }, node[e].entries );
     }
-
 
 };
 
 var createResEntry = function createResEntry(n, s) {
-    var ent = { text: n, url:true };
+    // logger.log("Create entry " + JSON.stringify(s, null, 2));
+    var ent = { text: n, url:true, canSave: s.canSave };
     if (typeof s === "string") {
         ent.value = s;
     } else {
-        var id = [];
-        for (var att in s) {
-            if (s.hasOwnProperty(att)) {
-                id.push(createResEntry(att, s[att]));
+        var id = [],
+            ents = s.entries;
+
+        for (var att in ents) {
+            if (ents.hasOwnProperty(att)) {
+                id.push(createResEntry(att, ents[att] ));
             }
 
             ent.submenu = {
@@ -86,7 +90,7 @@ var addResourceScripts = function addResourceScripts() {
             // return {path: js.replace(/.*!|.*\/classes/, "").split("/"), url: js};
             // 3 : file:/opt/alfresco-5.0/tomcat/shared/classes/alfresco/extension/contentreich-connector-context.xml
             // 4 : jar:file:/opt/alfresco-5.0/tomcat/webapps/alfresco/WEB-INF/lib/alfresco-messaging-repo-1.2.4.jar!/alfresco/extension/messaging-context.xml
-            return {path: js.replace(/.*!/, "").split("/"), url: js};
+            return {path: js.replace(/.*!/, "").split("/"), url: js, canSave: js.indexOf("file:/")  === 0 };
         });
 
     for (c in sRes) {

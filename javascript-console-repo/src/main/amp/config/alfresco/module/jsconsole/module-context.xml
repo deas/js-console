@@ -55,5 +55,13 @@
 		<property name="ignoreIncludeEx" value="${jsconsole.ignoreIncludeEx}"/>
 	</bean>
 
+	<bean id="jsconsole.extension.badAss" parent="baseJavaScriptExtension" class="de.fme.jsconsole.BadAss">
+		<property name="extensionName" value="badass"/>
+		<property name="contentService" ref="ContentService"/>
+		<property name="authorityService" ref="AuthorityService"/>
+		<property name="adminOnly" value="${jsconsole.badass.adminOnly}"/>
+		<property name="enabled" value="${jsconsole.badass.enabled}"/>
+	</bean>
+
 </beans>
 

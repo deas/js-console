@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.extensions.webscripts.ClassPathStoreResourceResolver;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +22,13 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
     private String[] urlIncludes;
     private String[] scanPattern;
     private boolean ignoreIncludeEx;
+
+    public void saveResource(String url, String content) throws Exception {
+        logger.debug("Save {}", url);
+        try  (PrintStream ps = new PrintStream(new FileOutputStream(Paths.get(new URL(url).toURI()).toFile()))) {
+            ps.print(content);
+        }
+    }
 
     public void setIgnoreIncludeEx(boolean ignoreIncludeEx) {
         this.ignoreIncludeEx = ignoreIncludeEx;
@@ -103,4 +110,5 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
     public ApplicationContext getApplicationContext() {
         return applicationContext;
     }
+
 }

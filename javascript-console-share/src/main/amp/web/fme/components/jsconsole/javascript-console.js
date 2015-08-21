@@ -182,7 +182,7 @@ if (typeof String.prototype.startsWith != 'function') {
           this.createThemeMenu();
           scripts.forEach(function(e) { this.initTitle.call(this, e); }.bind(this));
           this.createScriptsLoadMenu(scripts);
-          this.createScriptsSaveMenu(scripts.filter(function(e) { return !e.url; }));
+          this.createScriptsSaveMenu(scripts.filter(function(e) { return /*!e.url || */ e.canSave; }));
           this.createDocsMenu();
           this.createDumpDisplayMenu();
 
@@ -2035,9 +2035,9 @@ if (typeof String.prototype.startsWith != 'function') {
 
 
 
-       saveAsExistingScript : function ACJC_saveAsExistingScript(filename, nodeRef) {
+       saveAsExistingScript : function ACJC_saveAsExistingScript(addr, filename) {
            Alfresco.util.Ajax.request({
-               url: Alfresco.constants.PROXY_URI + "de/fme/jsconsole/savescript.json?name="+encodeURIComponent(filename)+"&isUpdate=true",
+               url: Alfresco.constants.PROXY_URI + "de/fme/jsconsole/savescript.json?addr=" + encodeURIComponent(addr),
                method: Alfresco.util.Ajax.PUT,
                dataStr: YAHOO.lang.JSON.stringify({'jsScript':this.widgets.codeMirrorScript.getValue(), 'fmScript':this.widgets.codeMirrorTemplate.getValue()}),
                requestContentType: "application/json; charset=utf-8",
@@ -2057,7 +2057,7 @@ if (typeof String.prototype.startsWith != 'function') {
 
        saveAsNewScript : function ACJC_saveAsNewScript(filename) {
            Alfresco.util.Ajax.request({
-               url: Alfresco.constants.PROXY_URI + "de/fme/jsconsole/savescript.json?name="+encodeURIComponent(filename)+"&isUpdate=false",
+               url: Alfresco.constants.PROXY_URI + "de/fme/jsconsole/savescript.json?name="+encodeURIComponent(filename),
                method: Alfresco.util.Ajax.PUT,
                dataStr: YAHOO.lang.JSON.stringify({'jsScript':this.widgets.codeMirrorScript.getValue(), 'fmScript':this.widgets.codeMirrorTemplate.getValue()}),
                requestContentType: "application/json; charset=utf-8",
@@ -2083,13 +2083,15 @@ if (typeof String.prototype.startsWith != 'function') {
          * @method onLoadScriptClick
          */
        onSaveScriptClick : function ACJC_onSaveScriptClick(p_sType, p_aArgs, self) {
-          self.widgets.codeMirrorScript.save();
+           p_aArgs[0].preventDefault();
+
+           self.widgets.codeMirrorScript.save();
 
           var menuItem = p_aArgs[1];
           var filename = menuItem.cfg.getProperty("text");
-          var nodeRef = menuItem.value;
+          var addr = menuItem.value;
 
-          if (nodeRef == "NEW") {
+          if (addr == "NEW") {
               Alfresco.util.PopupManager.getUserInput(
               {
                   title: self.msg("title.save.choose.filename"),
@@ -2112,7 +2114,7 @@ if (typeof String.prototype.startsWith != 'function') {
                      handler: function ACJC_onSaveScriptClick_save()
                      {
                          this.destroy();
-                         self.saveAsExistingScript(filename, nodeRef);
+                         self.saveAsExistingScript(addr,  filename);
                      }
                  },
                  {
