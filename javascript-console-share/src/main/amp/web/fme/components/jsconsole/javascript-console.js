@@ -2087,11 +2087,12 @@ if (typeof String.prototype.startsWith != 'function') {
 
            self.widgets.codeMirrorScript.save();
 
-          var menuItem = p_aArgs[1];
-          var filename = menuItem.cfg.getProperty("text");
-          var addr = menuItem.value;
+          var menuItem = p_aArgs[1],
+            txt = menuItem.cfg.getProperty("text"),
+            addr = menuItem.value,
+            filename = addr.indexOf("workspace://") === 0 ? txt : addr;
 
-          if (addr == "NEW") {
+            if (addr == "NEW") {
               Alfresco.util.PopupManager.getUserInput(
               {
                   title: self.msg("title.save.choose.filename"),
