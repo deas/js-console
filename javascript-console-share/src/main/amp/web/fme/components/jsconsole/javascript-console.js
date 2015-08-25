@@ -177,12 +177,32 @@ if (typeof String.prototype.startsWith != 'function') {
           }
       },
 
+       // Ugh!
+       initSubmenuIds: function ACJC_initIds(entry) {
+           if (entry.submenu) {
+               entry.submenu.id = YAHOO.util.Dom.generateId();
+               entry.submenu.itemdata.forEach(function (f) {
+                   this.initSubmenuIds(f);
+               }.bind(this));
+           }
+       },
+
       createMenuButtons: function ACJC_createMenuButtons(scripts) {
 
           this.createThemeMenu();
-          scripts.forEach(function(e) { this.initTitle.call(this, e); }.bind(this));
+          // (Ugly) hack: Looks like we need two different scripts objects and different ids for the submenus
+          // Otherwise things tend to mess up. In fact, I would prefer having one menu only.
+          // scripts.forEach(function(e) { if (e.submenu) {e.submenu.id = YAHOO.util.Dom.generateId(); } });
+          scripts.forEach(function(e) {
+              this.initTitle.call(this, e);
+              this.initSubmenuIds.call(this, e)
+          }.bind(this));
           this.createScriptsLoadMenu(scripts);
-          this.createScriptsSaveMenu(scripts.filter(function(e) { return /*!e.url || */ e.canSave; }));
+          scripts = JSON.parse(JSON.stringify(scripts.filter(function(e) { return e.canSave; })));
+          scripts.forEach(function(e) {
+              this.initSubmenuIds.call(this, e);
+          }.bind(this));
+          this.createScriptsSaveMenu(scripts);
           this.createDocsMenu();
           this.createDumpDisplayMenu();
 

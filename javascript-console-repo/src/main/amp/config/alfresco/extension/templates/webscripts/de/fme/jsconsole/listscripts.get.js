@@ -10,7 +10,8 @@ var prepareOutput = function prepareOutput(folder) {
                 text: node.name,
                 canSave: true,
                 submenu: {
-                    id: node.properties["sys:node-uuid"], itemdata: prepareOutput(node)
+                    // id: node.properties["sys:node-uuid"],
+                    itemdata: prepareOutput(node)
                 }
             });
         }
@@ -52,7 +53,7 @@ var createResEntry = function createResEntry(n, s) {
             }
 
             ent.submenu = {
-                id: n,
+                // id: n,
                 itemdata: id
             };
 
