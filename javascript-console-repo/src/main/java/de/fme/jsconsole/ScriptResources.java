@@ -22,6 +22,16 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
     private String[] urlIncludes;
     private String[] scanPattern;
     private boolean ignoreIncludeEx;
+    private String[] repoXPaths;
+
+
+    public void setRepoXPaths(String[] repoXPaths) {
+        this.repoXPaths = repoXPaths;
+    }
+
+    public String[] getRepoXPaths() {
+        return repoXPaths;
+    }
 
     public void saveResource(String url, String content) throws Exception {
         logger.debug("Save {}", url);

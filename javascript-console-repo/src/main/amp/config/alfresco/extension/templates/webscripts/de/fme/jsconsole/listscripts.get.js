@@ -1,4 +1,5 @@
 var prepareOutput = function prepareOutput(folder) {
+    logger.log("Adding scripts from " +  folder.nodeRef);
     var scriptlist = [],
         children = folder.children;
 
@@ -40,10 +41,11 @@ var buildResNode = function buildResNode(s, node) {
 
 var createResEntry = function createResEntry(n, s) {
     // logger.log("Create entry " + JSON.stringify(s, null, 2));
-    var ent = { text: n, url:true, canSave: s.canSave };
+    var ent = { text: n, url:true };
     if (typeof s === "string") {
         ent.value = s;
     } else {
+        ent.canSave = s.canSave;
         var id = [],
             ents = s.entries;
 
@@ -110,11 +112,14 @@ var addResourceScripts = function addResourceScripts() {
 };
 
 var findAvailableScripts = function findAvailableScripts() {
-    var scriptFolder = companyhome.childrenByXPath("app:dictionary/app:scripts")[0],
+    var xpaths = jsConsoleResources.getRepoXPaths(),
         scripts = [];
 
-    if (scriptFolder) {
-        scripts = scripts.concat(prepareOutput(scriptFolder));
+    for (var i = 0; i<xpaths.length; i++) {
+        var folders = search.xpathSearch(xpaths[i]);
+        for (var j = 0; j<folders.length; j++) {
+            scripts = scripts.concat(prepareOutput(folders[j]));
+        }
     }
 
     scripts = scripts.concat(addResourceScripts());
