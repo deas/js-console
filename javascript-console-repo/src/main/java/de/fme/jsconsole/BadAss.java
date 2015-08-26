@@ -65,11 +65,20 @@ public class BadAss extends BaseScopableProcessorExtension {
 
     }
 
-    public void copyFile(String filename, NodeRef nodeRef) throws Exception {
+    public void copyFromFile(String filename, NodeRef nodeRef) throws Exception {
         securityCheck();
         logger.info("Copy {} to {}", nodeRef, filename);
         try (InputStream is = new FileInputStream(filename);
              OutputStream os = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true).getContentOutputStream()) {
+            IOUtils.copy(is, os);
+        }
+    }
+
+    public void copyToFile(String filename, NodeRef nodeRef) throws Exception {
+        securityCheck();
+        logger.info("Copy {} to {}", nodeRef, filename);
+        try (InputStream is = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT).getContentInputStream();
+             OutputStream os = new FileOutputStream(filename)) {
             IOUtils.copy(is, os);
         }
     }
