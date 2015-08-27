@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>fme JSConsole Remove Script</shortname>
+  <url>/de/fme/jsconsole/script/{addr}</url>
+  <authentication>admin</authentication>
+  <format default="json">argument</format>
+</webscript>

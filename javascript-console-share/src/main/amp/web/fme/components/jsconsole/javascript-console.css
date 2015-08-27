@@ -101,6 +101,9 @@
 	float:right;
 }
 
+.javascript-console .scriptmenu li.yuimenuitem { margin-right:20px;}
+.javascript-console .scriptmenu a.remove-search { position:absolute;left:-20px}
+
 .javascript-console .jserror {
 	border:1px solid red;
 	background-color:#FFE0E0;

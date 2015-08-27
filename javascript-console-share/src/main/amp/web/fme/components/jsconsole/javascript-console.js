@@ -197,12 +197,12 @@ if (typeof String.prototype.startsWith != 'function') {
               this.initTitle.call(this, e);
               this.initSubmenuIds.call(this, e)
           }.bind(this));
+          var saveScripts = JSON.parse(JSON.stringify(scripts.filter(function(e) { return e.canSave; })));
           this.createScriptsLoadMenu(scripts);
-          scripts = JSON.parse(JSON.stringify(scripts.filter(function(e) { return e.canSave; })));
-          scripts.forEach(function(e) {
+          saveScripts.forEach(function(e) {
               this.initSubmenuIds.call(this, e);
           }.bind(this));
-          this.createScriptsSaveMenu(scripts);
+          this.createScriptsSaveMenu(saveScripts);
           this.createDocsMenu();
           this.createDumpDisplayMenu();
 
@@ -270,11 +270,53 @@ if (typeof String.prototype.startsWith != 'function') {
           }
       },
 
-      createScriptsSaveMenu: function(listOfScripts){
+       deleteScript : function ACJC__deleteScript(item) {
+           var filename = item.element.lastChild.text,
+               me = this;
+           Alfresco.util.PopupManager.displayPrompt
+           ({
+               title: this.msg("title.confirm.delete"),
+               text: this.msg("message.confirm.delete", filename),
+               buttons: [
+                   {
+                       text: this.msg("button.delete"),
+                       handler: function ACJC__onDelete_delete() {
+                           this.destroy();
+                           var request = {
+                               url : Alfresco.constants.PROXY_URI + "de/fme/jsconsole/script/" + item.value.replace("file:/","/").replace("workspace://","workspace/"),
+                               method : Alfresco.util.Ajax.DELETE,
+                               failureMessage: me.msg("error.script.delete", filename),
+                               // failureMessage: "Remove failed",
+                               successCallback: {
+                                   fn: function onDeleteSuccess(response) {
+                                       Alfresco.util.PopupManager.displayMessage({
+                                           text: me.msg("message.delete.successful", filename)
+                                       });
+                                       me.createMenuButtons(response.json.scripts);
+                                   },
+                                   scope: this}
+                           };
+                           Alfresco.util.Ajax.request(request);
+                       }
+                   },
+                   {
+                       text: this.msg("button.cancel"),
+                       handler: function ACJC__onDelete_cancel() {
+                           this.destroy();
+                       },
+                       isDefault: true
+                   }
+               ]
+           });
+
+       },
+
+       createScriptsSaveMenu: function ACJC_createScriptsSaveMenu(listOfScripts){
           var saveMenuItems = [{
               text : this.msg("button.save.create.new"),
               value : "NEW"
-          }];
+            }],
+            me = this;
 
           saveMenuItems.push(listOfScripts);
 
@@ -282,7 +324,7 @@ if (typeof String.prototype.startsWith != 'function') {
               this.widgets.saveMenuButton.getMenu().clearContent();
               this.widgets.saveMenuButton.getMenu().addItems(saveMenuItems);
               this.widgets.saveMenuButton.getMenu().render(this.id + "-scriptsave");
-          }else{
+          } else{
               this.widgets.saveMenuButton  = new YAHOO.widget.Button({
                   id: "saveButton",
                   name: "saveButton",
@@ -294,6 +336,29 @@ if (typeof String.prototype.startsWith != 'function') {
               var menu = this.widgets.saveMenuButton.getMenu();
               menu.cfg.setProperty("zindex", 10);
               menu.subscribe("click", this.onSaveScriptClick, this);
+              menu.subscribe("render", function (p_sType, p_aArgs) {
+                  var renderedMenu = this;
+                  renderedMenu.getItems().forEach(function(item) {
+                      var val = item.value,
+                          el  = item.element;
+                      // console.log(item.element  + " " + item.value);
+                      if (val && "NEW" !== val) {
+                          var div = document.createElement("div");
+                          div.setAttribute("style","position:absolute;float:right;left:100%;display:inline-block;");
+                          var link = document.createElement("a");
+                          link.setAttribute("class","remove-search");
+                          link.setAttribute("href","#");
+                          Event.addListener(link, "click", function(event) {
+                              event.preventDefault();
+                              me.deleteScript.call(me, item);
+                          });
+                          link.innerHTML= '<img src="' + Alfresco.constants.URL_CONTEXT + 'modules/images/remove-16.png"/>';
+                          div.appendChild(link);
+                          el.insertBefore(div, el.firstChild);
+                      }
+                  });
+              });
+
           }
 
 
