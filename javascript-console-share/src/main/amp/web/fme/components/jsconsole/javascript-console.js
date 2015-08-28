@@ -328,7 +328,7 @@ if (typeof String.prototype.startsWith != 'function') {
               this.widgets.saveMenuButton  = new YAHOO.widget.Button({
                   id: "saveButton",
                   name: "saveButton",
-                  label: this.msg("button.save.script"),
+                  label: this.msg("button.script"),
                   type: "menu",
                   menu: saveMenuItems,
                   container: this.id + "-scriptsave"
@@ -344,17 +344,19 @@ if (typeof String.prototype.startsWith != 'function') {
                       // console.log(item.element  + " " + item.value);
                       if (val && "NEW" !== val) {
                           var div = document.createElement("div");
-                          div.setAttribute("style","position:absolute;float:right;left:100%;display:inline-block;");
+                          div.setAttribute("class", "remove-wrapper");
                           var link = document.createElement("a");
-                          link.setAttribute("class","remove-search");
                           link.setAttribute("href","#");
+                          link.setAttribute("class", "remove-search");
                           Event.addListener(link, "click", function(event) {
                               event.preventDefault();
                               me.deleteScript.call(me, item);
                           });
-                          link.innerHTML= '<img src="' + Alfresco.constants.URL_CONTEXT + 'modules/images/remove-16.png"/>';
+                          link.innerHTML= '&nbsp;X&nbsp;';
+                          // link.innerHTML = '<img src="' + Alfresco.constants.URL_CONTEXT + 'modules/images/remove-16.png"/>';
                           div.appendChild(link);
                           el.insertBefore(div, el.firstChild);
+                          // el.insertBefore(link, el.firstChild);
                       }
                   });
               });

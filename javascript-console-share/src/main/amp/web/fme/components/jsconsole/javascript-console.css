@@ -102,7 +102,13 @@
 }
 
 .javascript-console .scriptmenu li.yuimenuitem { margin-right:20px;}
-.javascript-console .scriptmenu a.remove-search { position:absolute;left:-20px}
+.javascript-console .scriptmenu a.remove-search { color:red;}
+
+.javascript-console .scriptmenu .remove-wrapper {
+	clear:left;
+	float:left;
+	display:inline-block;
+}
 
 .javascript-console .jserror {
 	border:1px solid red;
