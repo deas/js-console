@@ -10,7 +10,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.extensions.webscripts.ClassPathStoreResourceResolver;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,8 +84,17 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
 
     }
 
-    public String getResourceContent(String url) throws IOException {
-        try (InputStream is = new URL(url).openStream()) {
+    public String getResourceContent(String urls) throws IOException {
+        URLConnection connection = new URL(urls).openConnection();
+        try (InputStream is = connection.getInputStream()) {
+            if  (connection instanceof HttpURLConnection) {
+                HttpURLConnection httpConn = (HttpURLConnection) connection;
+                int statusCode = httpConn.getResponseCode();
+                logger.warn("Got response code {} for {}", statusCode, urls);
+                // TODO Should propagate to Client
+                throw new IOException("Invalid status " + statusCode + " for " + urls);
+
+            }
             java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
             return s.hasNext() ? s.next() : null;
         }

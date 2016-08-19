@@ -59,6 +59,8 @@
                     defaults to the alfresco.war artifact ID, so we need to override here. -->
 		<app.amp.client.war.artifactId>${alfresco.share.artifactId}</app.amp.client.war.artifactId>
 
+        <env>local</env>
+        <share.servlet.port>8081</share.servlet.port>
 
 
     </properties>
@@ -84,6 +86,13 @@
 
     <!-- Following dependencies are needed for compiling Java code in src/main/java;  -->
     <dependencies>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>share</artifactId>
+            <type>war</type>
+            <version>${alfresco.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>${alfresco.groupId}</groupId>
             <artifactId>share</artifactId>
@@ -119,7 +128,32 @@
 	  <plugins>
 
 <!-- Compress JavaScript files and store as *-min.js -->
-            
+          <plugin>
+              <groupId>org.mortbay.jetty</groupId>
+              <artifactId>jetty-maven-plugin</artifactId>
+              <configuration>
+                  <connectors>
+                      <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                          <port>${share.servlet.port}</port>
+                      </connector>
+                  </connectors>
+                  <webApp>
+                      <resourceBases>
+                          <resourceBase>src/main/amp/web</resourceBase>
+                      </resourceBases>
+                      <contextPath>/share</contextPath>
+                  </webApp>
+              </configuration>
+              <!-- executions>
+                                  <execution>
+                                      <id>run-jetty</id>
+                                      <phase>pre-integration-test</phase>
+                                      <goals>
+                                          <goal>run-exploded</goal>
+                                      </goals>
+                                  </execution>
+                              </executions-->
+          </plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<configuration>
