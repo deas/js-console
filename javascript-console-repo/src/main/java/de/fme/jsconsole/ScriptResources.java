@@ -90,10 +90,11 @@ public class ScriptResources extends BaseProcessorExtension implements Applicati
             if  (connection instanceof HttpURLConnection) {
                 HttpURLConnection httpConn = (HttpURLConnection) connection;
                 int statusCode = httpConn.getResponseCode();
-                logger.warn("Got response code {} for {}", statusCode, urls);
-                // TODO Should propagate to Client
-                throw new IOException("Invalid status " + statusCode + " for " + urls);
-
+                if (statusCode != HttpURLConnection.HTTP_OK) {
+                    logger.warn("Got response code {} for {}", statusCode, urls);
+                    // TODO Should propagate to Client
+                    throw new IOException("Unexpected status " + statusCode + " for " + urls);
+                }
             }
             java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
             return s.hasNext() ? s.next() : null;
