@@ -532,9 +532,10 @@ if (typeof String.prototype.startsWith != 'function') {
            };
 
          // Attach the CodeMirror highlighting
-         var uiMirrorScript = new CodeMirrorUI(this.widgets.scriptInput, {imagePath:Alfresco.constants.URL_RESCONTEXT+'fme/components/jsconsole/codemirror-ui/images', searchMode:'no'} ,{
+         var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+             uiMirrorScript = new CodeMirrorUI(this.widgets.scriptInput, {imagePath:Alfresco.constants.URL_RESCONTEXT+'fme/components/jsconsole/codemirror-ui/images', searchMode:'no'} ,{
              mode : "javascript",
-             styleActiveLine: true,
+             styleActiveLine: isAndroid ? false : true,
              showCursorWhenSelecting :true,
             // gutters: ["CodeMirror-linenumbers", "CodeMirror-lint-markers"],
           //   lintWith: function(text){
