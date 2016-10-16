@@ -1,0 +1,27 @@
+{
+  "name": "javascript-console-share",
+  "version": "1.0.0",
+  "authors": [
+    "Andreas Steffan <a.steffan@contentreich.de>"
+  ],
+  "description": "Alfresco JavaScript Console Share",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "contentreich"
+  ],
+  "license": "MIT",
+  "homepage": "http://www.contentreich.de",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "codemirror": "^5.19.0"
+  }
+}
