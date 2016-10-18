@@ -255,11 +255,11 @@
                         </moduleDependency>
 
                         <!-- Bring in custom Modules -->
-                        <moduleDependency>
+                        <!--moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>alfresco-sdk3-allinone-platform-jar</artifactId>
+                            <artifactId>whatever-platform</artifactId>
                             <version>${project.version}</version>
-                        </moduleDependency>
+                        </moduleDependency-->
                     </platformModules>
 
                     <!--
@@ -275,11 +275,11 @@
                         </moduleDependency>
 
                         <!-- Bring in custom Modules -->
-                        <moduleDependency>
+                        <!--moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>alfresco-sdk3-allinone-share-jar</artifactId>
+                            <artifactId>whatever-share</artifactId>
                             <version>${project.version}</version>
-                        </moduleDependency>
+                        </moduleDependency-->
                     </shareModules>
                 </configuration>
             </plugin>

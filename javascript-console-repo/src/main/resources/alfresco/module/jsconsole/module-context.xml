@@ -33,7 +33,7 @@
 	<bean id="jsconsole.extension.dictionaryBootstrap" parent="dictionaryModelBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/extension/model/fme-jsconsole-model.xml</value>
+				<value>alfresco/module/jsconsole/fme-jsconsole-model.xml</value>
 			</list>
 		</property>
 	</bean>
