@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/extension/templates/webscripts/de/fme/jsconsole/listscripts.get.js">
+<import resource="classpath:alfresco/templates/webscripts/de/fme/jsconsole/listscripts.get.js">
 
 var createFile = function createFile(parent, path) {
     var name = path.shift();

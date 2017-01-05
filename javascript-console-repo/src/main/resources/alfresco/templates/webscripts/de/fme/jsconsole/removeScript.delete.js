@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/extension/templates/webscripts/de/fme/jsconsole/listscripts.get.js">
+<import resource="classpath:alfresco/templates/webscripts/de/fme/jsconsole/listscripts.get.js">
 
 var addr  = url.templateArgs['addr'],
     removed  = false;
